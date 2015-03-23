@@ -2,14 +2,14 @@ package com.gcit.training.librarymanagement;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 
 public class Common {
 
 	//print out library locations
-	public int returnLocations(Statement s, String query) throws SQLException{
+	public int returnLocations(ResultSet r) throws SQLException{
 		
-		ResultSet r =  s.executeQuery(query);
+		//ResultSet r =  s.executeQuery(query);
 		int i = 1;
 		
 		while(r.next()){
@@ -24,9 +24,9 @@ public class Common {
 	}
 	
 	//print out books available at that library
-	public int printBooks(Statement s, String query) throws SQLException{
+	public int printBooks(ResultSet r) throws SQLException{
 			
-		ResultSet r = s.executeQuery(query);
+		//ResultSet r = s.executeQuery(query);
 		
 		int i = 1;
 		
