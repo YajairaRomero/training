@@ -83,12 +83,12 @@ public class BookLoanDAOTest {
 
 		//set bookId
 		Books b = new Books();
-		b.setBookid(7);
+		b.setBookid(4);
 		loan.setBook(b);
 
 		//set branchid
 		LibraryBranch lb = new LibraryBranch();
-		lb.setBranchid(4);
+		lb.setBranchid(1);
 		loan.setBranch(lb);
 
 		//set cardNo

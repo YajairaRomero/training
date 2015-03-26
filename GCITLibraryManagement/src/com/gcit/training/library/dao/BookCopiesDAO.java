@@ -14,7 +14,7 @@ public class BookCopiesDAO extends BaseDAO{
 	
 	public void create(BookCopies bookcopies) throws SQLException{
 		
-		if(bookcopies.getBooks() != null && bookcopies.getBranches() != null)
+		//if(bookcopies.getBooks() != null && bookcopies.getBranches() != null)
 			save("insert into tbl_book_copies (bookId, branchId, noOfCopies) values (?, ?, ?)",
 				new Object[] {bookcopies.getBooks().getBookid(), bookcopies.getBranches().getBranchid(), bookcopies.getNoOfCopies() });
 	
@@ -24,7 +24,7 @@ public class BookCopiesDAO extends BaseDAO{
 	public void read(BookCopies bookcopies) throws SQLException{
 		List<Object> list = null;
 		
-		if(bookcopies.getBooks() != null && bookcopies.getBranches() != null)
+		//if(bookcopies.getBooks() != null && bookcopies.getBranches() != null)
 			list = saveResultSet("select noOfCopies from tbl_book_copies where bookId = ? and branchId = ?",
 				new Object[] {bookcopies.getBooks().getBookid(), bookcopies.getBranches().getBranchid() });
 		
@@ -34,7 +34,7 @@ public class BookCopiesDAO extends BaseDAO{
 	
 	public void update(BookCopies bookcopies) throws SQLException{
 		
-		if(bookcopies.getBooks() != null && bookcopies.getBranches() != null)
+		//if(bookcopies.getBooks() != null && bookcopies.getBranches() != null)
 			save("update tbl_book_copies set noOfCopies = ? where bookId = ? and branchId = ?",
 				new Object[] {bookcopies.getNoOfCopies(), bookcopies.getBooks().getBookid(), bookcopies.getBranches().getBranchid() });
 	
@@ -42,7 +42,7 @@ public class BookCopiesDAO extends BaseDAO{
 	
 	public void delete(BookCopies bookcopies) throws SQLException{
 		
-		if(bookcopies.getBooks() != null && bookcopies.getBranches() != null)
+		//if(bookcopies.getBooks() != null && bookcopies.getBranches() != null)
 			save("delete from tbl_book_copies where bookId = ? and branchId = ?",
 					new Object[] {bookcopies.getBooks().getBookid(), bookcopies.getBranches().getBranchid()});
 
