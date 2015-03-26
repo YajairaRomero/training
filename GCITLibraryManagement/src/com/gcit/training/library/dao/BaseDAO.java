@@ -53,7 +53,7 @@ public abstract class BaseDAO {
 		ResultSetMetaData metadata = rs.getMetaData();
 		int numColumns = metadata.getColumnCount();
 		
-		//int loop = 1;
+		
 		List<Object> result = new ArrayList<Object>();
 		
 		while(rs.next()){
@@ -62,7 +62,6 @@ public abstract class BaseDAO {
 				result.add(rs.getObject(i));
 				i++;
 			}
-			//loop++;
 		}
 		
 		return result;

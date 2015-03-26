@@ -39,7 +39,6 @@ public class BooksDAO extends BaseDAO {
 	
 	public void read(Books book) throws SQLException{
 		
-
 		List<Object> list = saveResultSet("select title from tbl_book where bookId = ?", 
 				new Object [] { book.getBookid()});
 
