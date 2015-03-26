@@ -204,28 +204,190 @@ public class Main {
 									//manage books
 
 									while(acont3){ //loop back to menu ADMIN3ab
-										System.out.println("1) Add book \n 2) Select book \n3) Quit to previous");
+										System.out.println("1) Add book \n2) Select book \n3) Quit to previous");
 										//add an author
 
 										y = input.nextInt();
 
 										if(y ==1){
 											//add book
-											int res = admin.add3(input);
+											int res = admin.add4(input);
 
 											if(res == 1){
-												String query = "insert into tbl_author (authorName) values(?)";
+												System.out.println("Choose an author from the list: ");	
 
+												String query = "select authorName from tbl_author";
 												ps = (PreparedStatement) conn.prepareStatement(query);
-												ps.setString(1, admin.getName());
+												ResultSet rs = ps.executeQuery();
 
-												ps.executeUpdate();
+												//print author list
+												int i = admin.print(rs, "authorName");
+												//i++;
+												System.out.println(i + ") Quit");
 
-												System.out.println("Author added");
+												//select author or to quit
+												int y2 = input.nextInt();
+
+												if(y2 < i){  //user chose to continue 
+																										
+													ps = (PreparedStatement) conn.prepareStatement("select * from tbl_author");
+													rs = ps.executeQuery();
+													admin.chooseAuthor(rs, y2);
+													int aid = admin.getId(); // authorid
+
+													//ask user to choose a publisher
+													System.out.println("Select a publisher from the list");
+													query = "select publisherName, publisherAddress, publisherPhone from tbl_publisher";
+													ps = (PreparedStatement) conn.prepareStatement(query);
+													rs = ps.executeQuery();
+													i = admin.printPublishers(rs);
+													//i++;
+													System.out.println(i + ") Quit");
+													
+													y2 = input.nextInt();
+
+													if(y2 < i){ // user chose to continue
+														ps = (PreparedStatement) conn.prepareStatement("select * from tbl_publisher");
+														rs = ps.executeQuery();
+														admin.choosePublisher(rs, y2);
+														
+														//insert information into tbl_book
+														query = "insert into tbl_book (title, pubId) values (?, ?)";
+														ps = (PreparedStatement) conn.prepareStatement(query);
+														ps.setString(1, admin.getTitle());
+														ps.setInt(2, admin.getId());
+														int result = ps.executeUpdate();
+														
+														if(result == 1){
+																													
+															//set values in tbl_book_author
+															//first, get bookid
+															query = "select bookId from tbl_book where title = ?";
+															ps = (PreparedStatement) conn.prepareStatement(query);
+															ps.setString(1, admin.getTitle());
+															rs = ps.executeQuery();
+															rs.next();
+															int bid = rs.getInt("bookId");
+															
+															query = "insert into tbl_book_authors (bookId, authorId) values (?, ?)";
+															ps = (PreparedStatement) conn.prepareStatement(query);
+															ps.setInt(1, bid);
+															ps.setInt(2, aid);
+															res = ps.executeUpdate();
+															
+															if(res == 1)
+																System.out.println("Book added successfully");
+														}
+													}
+												}
 											}
 										}
+										
 										else if(y == 2){
 											//select book
+											boolean acont4 = true;
+
+											while(acont4){ //loop back to menu ADMIN4ab
+												System.out.println("Select a book");
+												ps = (PreparedStatement) conn.prepareStatement("select title from tbl_book");
+												ResultSet rs = ps.executeQuery();
+												int i = admin.print(rs, "title");
+												System.out.println(i + ") Quit to previous");
+												y = input.nextInt();
+
+												if(y < i){
+													//select book
+													ps = (PreparedStatement) conn.prepareStatement("select * from tbl_book");
+													rs = ps.executeQuery();
+													admin.chooseBook(rs, y);
+													
+													//HOW TO HANDLE MULTIPLE AUTHORS????
+													String query = "select authorId from tbl_book_authors where bookId = ?";
+													ps = (PreparedStatement) conn.prepareStatement(query);
+													ps.setInt(1, admin.getBookid());
+													rs = ps.executeQuery();
+													
+													admin.chooseAuthor2(rs);
+													
+													boolean acont5 = true;
+													
+													while(acont5){ //loop back to menu ADMIN5ab
+														
+														System.out.println("1) Update book \n2) Delete book \n3) Quit to previous");
+														y = input.nextInt();
+														
+														if(y == 1){
+															//update book
+															int result = admin.updateBook(input);
+															
+															if(result == 1){ //user chose to continue
+																
+																System.out.println("Select a new author or 'No Change' option for no change");
+																ps = (PreparedStatement) conn.prepareStatement("select authorName from tbl_author");
+																rs = ps.executeQuery();
+																i = admin.print(rs, "authorName");
+																System.out.println(i +") No Change");
+																i++;
+																System.out.println(i +") Quit");
+																
+																y = input.nextInt();
+																
+																ps = (PreparedStatement) conn.prepareStatement("select * from tbl_author");
+																rs = ps.executeQuery();
+																
+																admin.chooseAuthor(rs, y);
+																
+																if(y < i){ // user chose to continue
+																	System.out.println("Select a new publisher or 'No Change' option for no change");
+																	ps = (PreparedStatement) conn.prepareStatement("select publisherName from tbl_publisher");
+																	rs = ps.executeQuery();
+																	i = admin.print(rs, "publisherName");
+																	System.out.println(i +") No Change");
+																	i++;
+																	System.out.println(i +") Quit");
+																	
+																	y = input.nextInt();
+																	
+																	if(y < i){ //user chose to continue
+																		//insert information into tbl_book, tbl_book_authors
+																		System.out.println("title is " + admin.getTitle() + " publisher id is "
+																		+ admin.getPubid() + " and authorid is " + admin.getId());
+																		
+																		query = "update tbl_book set title = ?, pubId = ? where bookId = ?";
+																		ps = (PreparedStatement) conn.prepareStatement(query);
+																		ps.setString(1, admin.getTitle());
+																		ps.setInt(2, admin.getPubid());
+																		ps.setInt(3, admin.getBookid());																		
+																		int res = ps.executeUpdate();
+																		
+																		if(res == 1){ //if update was successful, update tbl_book_authors
+																			
+																		}
+																		
+																		
+																	}
+																	
+																}
+																
+															}
+															
+														}
+														
+														else if (y == 2){
+															//delete book
+														}
+														
+														else //quit to previous
+															acont5 = false;
+													}//loop back to menu ADMIN5ab
+
+												}
+
+												else 
+													acont4 = false;
+
+											} //loop back to menu ADMIN4ab
+											
 										}
 										else
 											acont3 = false;
@@ -236,7 +398,7 @@ public class Main {
 									//manage authors
 
 									while(acont3){ //loop back to menu ADMIN3ab
-										System.out.println("1) Add author \n 2) Select author \n3) Quit to previous");
+										System.out.println("1) Add author \n2) Select author \n3) Quit to previous");
 										//add an author
 
 										y = input.nextInt();
@@ -268,13 +430,10 @@ public class Main {
 												ps = (PreparedStatement) conn.prepareStatement(query);
 
 												ResultSet rs = ps.executeQuery();
-												int i =1; 
-												
+																								
 												// print author names
-												while(rs.next()){
-													System.out.println(i +") " + rs.getString("authorName") );
-													i++;
-												}
+												int i = admin.print(rs, "authorName");
+												//i++;
 												System.out.println(i + ") Quit to previous");
 
 												int y2 = input.nextInt();
@@ -290,22 +449,19 @@ public class Main {
 													boolean acont5 = true;
 
 													while(acont5){ //loop back to menu ADMIN4
-														System.out.println("1) Update publisher \n2) Delete publisher \n3) Quit to previous");
+														System.out.println("1) Update author \n2) Delete author \n3) Quit to previous");
 														y = input.nextInt();
 
 														if(y==1){
-															//update publisher
-															int res = admin.update("publisher", input);
+															//update author
+															int res = admin.updateAuthor(input);
 
 															if(res == 1){
-																query = "update tbl_publisher set publisherName = ?, publisherAddress = ?, publisherPhone = ? "
-																		+ "where publisherId =? ";
+																query = "update tbl_author set authorName = ? "
+																		+ "where authorId =? ";
 																ps = (PreparedStatement) conn.prepareStatement(query);
 																ps.setString(1, admin.getName());
-																ps.setString(2, admin.getAddr());
-																ps.setString(3, admin.getPhone());
-																ps.setInt(4, admin.getId());
-
+																ps.setInt(2, admin.getId());
 																res = ps.executeUpdate();
 
 																if(res == 1)
@@ -315,16 +471,16 @@ public class Main {
 														}
 
 														else if(y == 2){
-															//delete publisher
-															query = "delete from tbl_publisher where publisherId = ?";
+															//delete author
+															query = "delete from tbl_author where authorId = ?";
 															ps = (PreparedStatement) conn.prepareStatement(query);
 															ps.setInt(1, admin.getId());
 
 															int res = ps.executeUpdate();
 
 															if(res == 1){
-																System.out.println("Publisher deleted successfully \n");
-																acont4 = false;
+																System.out.println("Author deleted successfully \n");
+																acont5 = false;
 															}
 
 														}
@@ -342,6 +498,7 @@ public class Main {
 										else
 											acont3 = false;
 									} // loop back to menu ADMIN3ab
+									
 									break;
 
 								case 3:
@@ -394,13 +551,11 @@ public class Main {
 										ps = (PreparedStatement) conn.prepareStatement(query);
 
 										ResultSet rs = ps.executeQuery();
-										int i =1; 
-										while(rs.next()){
-											System.out.println(i +") " + rs.getString("publisherName") + ", " + rs.getString("publisherAddress") + ", " + rs.getString("publisherPhone"));
-											i++;
-										}
+										
+										int i = admin.printPublishers(rs); // print publishers	
+										//i++;
 										System.out.println(i + ") Quit to previous");
-
+										
 										int y2 = input.nextInt();
 
 										query = "select * from tbl_publisher";
@@ -410,9 +565,10 @@ public class Main {
 										rs = ps.executeQuery();
 
 										admin.choosePublisher(rs, y2);
+										
 
-
-										if(y2 < i){
+										
+										if(y2 <i){
 											boolean acont4 = true;
 
 											while(acont4){ //loop back to menu ADMIN4
@@ -430,7 +586,7 @@ public class Main {
 														ps.setString(1, admin.getName());
 														ps.setString(2, admin.getAddr());
 														ps.setString(3, admin.getPhone());
-														ps.setInt(4, admin.getId());
+														ps.setInt(4, admin.getPubid());
 
 														res = ps.executeUpdate();
 
@@ -444,7 +600,7 @@ public class Main {
 													//delete publisher
 													query = "delete from tbl_publisher where publisherId = ?";
 													ps = (PreparedStatement) conn.prepareStatement(query);
-													ps.setInt(1, admin.getId());
+													ps.setInt(1, admin.getPubid());
 
 													int res = ps.executeUpdate();
 
@@ -815,6 +971,8 @@ public class Main {
 											ps.executeUpdate();
 
 											System.out.println("Book checked out successfully\n");
+											
+											//UPDATE number of books available at this branch!!!!
 										}
 
 										else 
@@ -882,6 +1040,9 @@ public class Main {
 
 									if(res == 1)
 										System.out.println("Book returned successfully");
+										
+										//UPDATE number of books available at this branch!!!!!!!!
+									
 									continue;
 								}
 

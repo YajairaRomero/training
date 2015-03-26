@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class Borrower {
 
 	public int max = 0;
-	private int id = 0, bookid = 0, cardno = 0, x =1;
+	private int id = 0, bookid = 0, cardno = 0, x =1, origCopies = 0;
 
 	public boolean checkUser(ResultSet rs, int num) throws SQLException{
 

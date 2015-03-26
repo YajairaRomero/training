@@ -6,8 +6,10 @@ import java.util.Scanner;
 
 public class Administrator {
 	
-	private String name = "", addr = "", phone=""; 
-	private int id = 0, bookid = 0, x=0;
+	private String name = "", addr = "", phone="", title =""; 
+	private int id = 0, bookid = 0, pid = 0;
+	
+	public int x=0;
 	
 	//add for publishers, borrowers
 	public int add(String type, Scanner input){		
@@ -48,6 +50,91 @@ public class Administrator {
 	}
 	
 	
+	//add for library branch
+	public int add2(Scanner input){		
+		
+		System.out.print("You're about to enter information for a new library branch. Enter 'quit' at any "
+				+ "prompt to cancel. \nEnter new branch name: ");
+		
+		String n = input.nextLine();
+		n = input.nextLine();
+
+		if(n.equals("quit")){
+
+			return 0;
+		}
+			
+		name = n;
+
+		System.out.print("Enter new branch address: ");
+		String a = input.nextLine();
+
+		if(a.equals("quit")){
+			return 0;
+		}
+		
+		addr = a;
+
+
+		return 1;
+	}
+	
+	
+	
+	//add for author
+	public int add3(Scanner input){		
+		
+		System.out.print("You're about to enter information for a new author. Enter 'quit' at "
+				+ "prompt to cancel. \nEnter new author name: ");
+		
+		String n = input.nextLine();
+		n = input.nextLine();
+
+		if(n.equals("quit")){
+
+			return 0;
+		}
+			
+		name = n;
+
+		return 1;
+	}
+	
+	//add a book
+	public int add4(Scanner input){		
+		
+		System.out.print("You're about to enter information for a new book. Enter or select 'quit' at any "
+				+ "prompt to cancel. \nEnter new book name: ");
+		
+		String t = input.nextLine();
+		t = input.nextLine();
+
+		if(t.equals("quit")){
+
+			return 0;
+		}
+			
+		title = t;
+
+		return 1;
+	}
+	
+	public void chooseBook(ResultSet r, int i) throws SQLException{
+		x = 1;
+		
+		while(r.next()){
+
+			if(x == i){
+				bookid = r.getInt("bookId");
+				title =r.getString("title");	
+				pid = r.getInt("pubId");
+				break;
+			}
+			x++;
+	
+		}
+	}
+	
 	public void chooseAuthor(ResultSet r, int i) throws SQLException{
 		x = 1;
 		
@@ -55,11 +142,33 @@ public class Administrator {
 
 			if(x == i){
 				id = r.getInt("authorId");
-				name=r.getString("authorName");							
+				name=r.getString("authorName");	
 				break;
 			}
 			x++;
 		}
+		
+		System.out.println("id is " + id);
+		
+		
+	}
+	
+	public void chooseAuthor2(ResultSet r) throws SQLException{
+	//	x = 1;
+		
+		while(r.next()){
+
+			//if(x == i){
+				id = r.getInt("authorId");
+				//name=r.getString("authorName");	
+				break;
+			//}
+		//	x++;
+		}
+		
+		System.out.println("id is " + id);
+		
+		
 	}
 	
 	public void choosePublisher(ResultSet r, int i) throws SQLException{
@@ -69,7 +178,7 @@ public class Administrator {
 		while(r.next()){
 
 			if(x == i){
-				id = r.getInt("publisherId");
+				pid = r.getInt("publisherId");
 				name=r.getString("publisherName");
 				addr = r.getString("publisherAddress");
 				phone = r.getString("publisherPhone");				
@@ -118,8 +227,7 @@ public class Administrator {
 	
 	//update for publishers, borrowers
 	public int update(String type, Scanner input){
-		//SHOULD GET EXISTING INFO BEFORE TO SAVE AND THEN UPDATE ACCORDINGLY
-		
+				
 		System.out.print("You're about to update information for a " +type + " with name: " + name +". Enter 'quit' at any "
 				+ "prompt to cancel. \nUpdate " + type + " name or N/A for no change: ");
 		
@@ -184,56 +292,73 @@ public class Administrator {
 		return 1;
 	}
 	
-	//add for library branch
-	public int add2(Scanner input){		
+	
+	//update Author
+	public int updateAuthor(Scanner input){
 		
-		System.out.print("You're about to enter information for a new library branch. Enter 'quit' at any "
-				+ "prompt to cancel. \nEnter new branch name: ");
+		System.out.print("You're about to update information for an author with name: " + name +" and id: " + id +". "
+				+ "Enter 'quit' at any prompt to cancel. \nUpdate author name or N/A for no change: ");
 		
 		String n = input.nextLine();
 		n = input.nextLine();
-
-		if(n.equals("quit")){
-
-			return 0;
-		}
-			
-		name = n;
-
-		System.out.print("Enter new branch address: ");
-		String a = input.nextLine();
-
-		if(a.equals("quit")){
-			return 0;
-		}
 		
-		addr = a;
-
+		if(n.equals("quit"))
+			return 0;
+		else if(!n.equals("N/A")){
+			name = n;
+		}
 
 		return 1;
 	}
 	
-	//add for author
-	public int add3(Scanner input){		
-		
-		System.out.print("You're about to enter information for a new author. Enter 'quit' at "
-				+ "prompt to cancel. \nEnter new author name: ");
-		
-		String n = input.nextLine();
-		n = input.nextLine();
-
-		if(n.equals("quit")){
-
-			return 0;
-		}
+	//update book
+		public int updateBook(Scanner input){
 			
-		name = n;
+			System.out.print("You're about to update information for a book with title: "
+					+ title +  " and bookid: " + bookid + "."
+					+ "Enter or select quit at any prompt to exit. \n"
+					+ "Enter new title or N/A for no change: ");
+			
+			String t = input.nextLine();
+			t = input.nextLine();
+			
+			if(t.equals("quit"))
+				return 0;
+			else if(!t.equals("N/A")){
+				title = t;
+			}
 
-		return 1;
+			return 1;
+		}
+	
+
+	public int print(ResultSet rs, String column) throws SQLException{
+		x=1;
+		
+		while(rs.next()){
+			System.out.println(x +") " + rs.getString(column) );
+			x++;
+		}
+		//System.out.println(x + ") Quit to previous");
+		return x;
 	}
+	
+	public int printPublishers(ResultSet rs) throws SQLException{
+		x=1;
+		
+		while(rs.next()){
+			System.out.println(x +") " + rs.getString("publisherName") + ", " + rs.getString("publisherAddress") + ", " + rs.getString("publisherPhone"));
+			x++;
+		}
+		//System.out.println(x + ") Quit to previous");
+		
+		return x;
+	}
+
 	
 	
 	public String getName(){
+	
 		return name;
 	}
 	
@@ -247,5 +372,17 @@ public class Administrator {
 
 	public int getId(){
 		return id;
+	}
+	
+	public String getTitle(){
+		return title;
+	}
+	
+	public int getBookid(){
+		return bookid;
+	}
+	
+	public int getPubid(){
+		return pid;
 	}
 }
