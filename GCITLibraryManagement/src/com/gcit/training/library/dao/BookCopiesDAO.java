@@ -2,6 +2,7 @@ package com.gcit.training.library.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.gcit.training.library.BookCopies;
 
@@ -21,7 +22,14 @@ public class BookCopiesDAO extends BaseDAO{
 	}
 	
 	public void read(BookCopies bookcopies) throws SQLException{
+		List<Object> list = null;
 		
+		if(bookcopies.getBooks() != null && bookcopies.getBranches() != null)
+			list = saveResultSet("select noOfCopies from tbl_book_copies where bookId = ? and branchId = ?",
+				new Object[] {bookcopies.getBooks().getBookid(), bookcopies.getBranches().getBranchid() });
+		
+		for(Object obj : list)
+			System.out.print(obj + "    ");
 	}
 	
 	public void update(BookCopies bookcopies) throws SQLException{

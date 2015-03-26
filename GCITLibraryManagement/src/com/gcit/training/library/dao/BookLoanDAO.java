@@ -2,6 +2,7 @@ package com.gcit.training.library.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.gcit.training.library.BookLoan;
 
@@ -37,16 +38,26 @@ public class BookLoanDAO extends BaseDAO{
 	}
 
 
-	public void read(BookLoan loan){
+	public void read(BookLoan loan) throws SQLException{
+		
+		List<Object> list = saveResultSet("select dateOut, dueDate from tbl_book_loans where bookId = ? and branchId = ? and cardNo = ?",
+				new Object[] {loan.getBook().getBookid(), loan.getBranch().getBranchid(), loan.getBorrower().getCardno()});
+		
+		for(Object obj : list)
+			System.out.print(obj + "    ");
+	}
+
+	public void update(BookLoan loan) throws SQLException{
+		
+		save("update tbl_book_loans set dueDate = ? where bookId = ? and branchId = ? and cardNo = ?",
+				new Object[] {loan.getDueDate(), loan.getBook().getBookid(), loan.getBranch().getBranchid(), loan.getBorrower().getCardno()});
 
 	}
 
-	public void update(BookLoan loan){
+	public void delete(BookLoan loan) throws SQLException{
 
-	}
-
-	public void delete(BookLoan loan){
-
+		save("delete from tbl_book_loans where bookId = ? and branchId = ? and cardNo = ?",
+				new Object[] {loan.getBook().getBookid(), loan.getBranch().getBranchid(), loan.getBorrower().getCardno()});
 	}
 
 }
