@@ -70,9 +70,7 @@ public class BooksDAOTest {
 	
 	@Test
 	public void testRead() throws SQLException {
-		Books book = new Books();
-		book.setBookid(3);
-		
+
 		try {
 			conn.setAutoCommit(false);
 			new BooksDAO(conn).read();
@@ -86,6 +84,23 @@ public class BooksDAOTest {
 		
 	}
 
+	@Test
+	public void testReadOne() throws SQLException {
+		Books book = new Books();
+		book.setBookid(3);
+		
+		try {
+			conn.setAutoCommit(false);
+			new BooksDAO(conn).readOne(3);
+			conn.commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			conn.rollback();
+			fail("books delete failed");
+		}
+		
+	}
 
 	//@Test
 	public void testUpdate() {

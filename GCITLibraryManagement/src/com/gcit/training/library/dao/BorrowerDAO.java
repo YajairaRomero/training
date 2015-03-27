@@ -25,13 +25,13 @@ public class BorrowerDAO extends BaseDAO<Borrower>{
 
 	public List<Borrower> read() throws SQLException {
 
-		return (List<Borrower>) saveResultSet("select * from tbl_borrower");
+		return (List<Borrower>) readResultSet("select * from tbl_borrower");
 
 	}
 
 	public Borrower readOne(int borrowerid) throws SQLException {
-		readOne = 1;
-		List<Borrower> list = (List<Borrower>) saveResultSet("select name, address, phone from tbl_borrower where cardNo = ?",
+
+		List<Borrower> list = (List<Borrower>) readAllResultSet("select * from tbl_borrower where cardNo = ?",
 				new Object [] { borrowerid});
 
 		if(list != null && list.size()>0)
@@ -61,13 +61,19 @@ public class BorrowerDAO extends BaseDAO<Borrower>{
 		while(rs.next()){
 			Borrower b = new Borrower();
 
-			if(readOne == 0)
-				b.setCardno(rs.getInt("cardNo"));
+
+			b.setCardno(rs.getInt("cardNo"));
 			b.setName(rs.getString("name"));
 			b.setAddress(rs.getString("address"));
 			b.setPhone(rs.getString("phone"));
 			list.add(b);	
 		}
 		return list;
+	}
+
+	@Override
+	public List<?> mapFirstLevelResults(ResultSet rs) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

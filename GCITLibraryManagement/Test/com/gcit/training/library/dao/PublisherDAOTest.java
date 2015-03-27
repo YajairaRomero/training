@@ -67,7 +67,7 @@ public class PublisherDAOTest {
 		
 		try {
 			conn.setAutoCommit(false);
-			new PublisherDAO(conn).readOne(2);
+			new PublisherDAO(conn).readOne(1);
 			conn.commit();
 			
 		} catch (Exception e) {

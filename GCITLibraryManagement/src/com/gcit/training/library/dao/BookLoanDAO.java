@@ -16,9 +16,9 @@ public class BookLoanDAO extends BaseDAO<BookLoan>{
 	}
 
 	public void create(BookLoan loan) throws SQLException{
-		
+
 		if(loan.getDateOut() == null){
-			
+
 			save("insert into tbl_book_loans (bookId, branchId, cardNo, dateOut, dueDate) values(?, ?, ?, ?, ?) ",
 					new Object[] {loan.getBook().getBookid(), loan.getBranch().getBranchid(), loan.getBorrower().getCardno(),
 					null, loan.getDueDate()});
@@ -40,16 +40,16 @@ public class BookLoanDAO extends BaseDAO<BookLoan>{
 
 	}
 
-	
+
 	public List<BookLoan> read() throws SQLException {
 
-		return (List<BookLoan>) saveResultSet("select * from tbl_book_loans");
+		return (List<BookLoan>) readResultSet("select * from tbl_book_loans");
 
 	}
 
 	public BookLoan readOne(int bookid, int branchid, int cardno) throws SQLException {
-		readOne = 1;
-		List<BookLoan> list = (List<BookLoan>) saveResultSet("select dateOut, dueDate from tbl_book_loans where bookId = ? and branchId = ? and cardNo = ?",
+
+		List<BookLoan> list = (List<BookLoan>) readAllResultSet("select * from tbl_book_loans where bookId = ? and branchId = ? and cardNo = ?",
 				new Object[] {bookid, branchid, cardno});
 
 		if(list != null && list.size()>0)
@@ -60,7 +60,7 @@ public class BookLoanDAO extends BaseDAO<BookLoan>{
 	}
 
 	public void update(BookLoan loan) throws SQLException{
-		
+
 		save("update tbl_book_loans set dueDate = ? where bookId = ? and branchId = ? and cardNo = ?",
 				new Object[] {loan.getDueDate(), loan.getBook().getBookid(), loan.getBranch().getBranchid(), loan.getBorrower().getCardno()});
 
@@ -78,21 +78,25 @@ public class BookLoanDAO extends BaseDAO<BookLoan>{
 		LibraryBranchDAO lbDAO = new LibraryBranchDAO(conn);
 		BorrowerDAO brDAO = new BorrowerDAO(conn);
 		BooksDAO bDAO = new BooksDAO(conn);
-		
+
 		while(rs.next()){
 			BookLoan bl = new BookLoan();
-			
-			if(readOne == 0){
-				bl.setBook(bDAO.readOne(rs.getInt("branchId")));
-				bl.setBranch(lbDAO.readOne(rs.getInt("branchId")));
-				bl.setBorrower(brDAO.readOne(rs.getInt("cardNo")));
-			}
+
+			bl.setBook(bDAO.readOne(rs.getInt("branchId")));
+			bl.setBranch(lbDAO.readOne(rs.getInt("branchId")));
+			bl.setBorrower(brDAO.readOne(rs.getInt("cardNo")));
 			bl.setDateOut(rs.getDate("dateOut"));
 			bl.setDueDate(rs.getDate("dueDate"));
-	
+
 			list.add(bl);	
 		}
 		return list;
+	}
+
+	@Override
+	public List<BookLoan> mapFirstLevelResults(ResultSet rs) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

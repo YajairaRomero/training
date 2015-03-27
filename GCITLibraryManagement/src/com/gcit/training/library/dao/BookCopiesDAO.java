@@ -26,14 +26,13 @@ public class BookCopiesDAO extends BaseDAO<BookCopies>{
 
 	public List<BookCopies> read() throws SQLException {
 
-		return (List<BookCopies>) saveResultSet("select * from tbl_book_copies");
+		return (List<BookCopies>) readResultSet("select * from tbl_book_copies");
 
 	}
 
 	public BookCopies readOne(int bookid, int branchid) throws SQLException {
-		readOne = 1;
 
-		List<BookCopies> list = (List<BookCopies>) saveResultSet("select noOfCopies from tbl_book_copies where bookId = ? and branchId = ?",
+		List<BookCopies> list = (List<BookCopies>) readAllResultSet("select * from tbl_book_copies where bookId = ? and branchId = ?",
 				new Object [] { bookid, branchid});
 
 		if(list != null && list.size()>0)			 
@@ -66,20 +65,23 @@ public class BookCopiesDAO extends BaseDAO<BookCopies>{
 
 		BooksDAO bDAO = new BooksDAO(conn);
 		LibraryBranchDAO lbDAO = new LibraryBranchDAO(conn);
-		
+
 		while(rs.next()){
 			BookCopies bc = new BookCopies();
-
-			if(readOne == 0){
-				bc.setBooks(bDAO.readOne(rs.getInt("bookId")));
-				bc.setBranches(lbDAO.readOne(rs.getInt("branchId")));
-			}
 			
+			bc.setBooks(bDAO.readOne(rs.getInt("bookId")));
+			bc.setBranches(lbDAO.readOne(rs.getInt("branchId")));
 			bc.setNoOfCopies(rs.getInt("noOfCopies"));
-			
+
 			list.add(bc);	
 		}
 		return list;
+	}
+
+	@Override
+	public List<?> mapFirstLevelResults(ResultSet rs) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 

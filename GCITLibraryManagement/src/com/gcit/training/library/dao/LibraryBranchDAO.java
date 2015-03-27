@@ -24,13 +24,13 @@ public class LibraryBranchDAO extends BaseDAO<LibraryBranch> {
 
 	public List<LibraryBranch> read() throws SQLException {
 
-		return (List<LibraryBranch>) saveResultSet("select * from tbl_library_branch");
+		return (List<LibraryBranch>) readResultSet("select * from tbl_library_branch");
 
 	}
 
 	public LibraryBranch readOne(int branchid) throws SQLException {
-		readOne = 1;
-		List<LibraryBranch> list = (List<LibraryBranch>) saveResultSet("select branchName, branchAddress from tbl_library_branch where branchId = ?",
+
+		List<LibraryBranch> list = (List<LibraryBranch>) readAllResultSet("select * from tbl_library_branch where branchId = ?",
 				new Object[] {branchid});
 
 		if(list != null && list.size()>0)
@@ -55,18 +55,24 @@ public class LibraryBranchDAO extends BaseDAO<LibraryBranch> {
 	@Override
 	public List<LibraryBranch> mapResults(ResultSet rs) throws SQLException {
 		List<LibraryBranch> list = new ArrayList<LibraryBranch>(); 
-		
+
 		while(rs.next()){
 			LibraryBranch lb = new LibraryBranch();
-			
-			if(readOne == 0)
-				lb.setBranchid(rs.getInt("branchId"));
+
+
+			lb.setBranchid(rs.getInt("branchId"));
 			lb.setBname(rs.getString("branchName"));
 			lb.setBaddr(rs.getString("branchAddress"));
-	
+
 			list.add(lb);	
 		}
 		return list;
+	}
+
+	@Override
+	public List<?> mapFirstLevelResults(ResultSet rs) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

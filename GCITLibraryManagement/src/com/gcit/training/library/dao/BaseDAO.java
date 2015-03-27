@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public abstract class BaseDAO<T> {
-	protected int readOne = 0; 
+	
 	protected Connection conn = null;
 
 	public BaseDAO() {
@@ -43,36 +43,13 @@ public abstract class BaseDAO<T> {
 
 	}
 	
-	/*
-	public List saveResultSet(String query) throws SQLException{
-		
-		PreparedStatement ps = conn.prepareStatement(query);
-		ResultSet rs = ps.executeQuery();
-		
-		//get number of columns
-		ResultSetMetaData metadata = rs.getMetaData();
-		int numColumns = metadata.getColumnCount();
-		
-		
-		List<Object> result = new ArrayList<Object>();
-		
-		while(rs.next()){
-			int i = 1;
-			while(i <= numColumns){
-				result.add(rs.getObject(i));
-				i++;
-			}
-		}
-		
-		return result;
-	}
-*/
-	public List<?> saveResultSet(String query) throws SQLException{
-		return saveResultSet(query, null); 
+
+	public List<?> readResultSet(String query) throws SQLException{
+		return readAllResultSet(query, null); 
 	
 	}
 	
-	public List<?> saveResultSet(String query,  Object [] vals) throws SQLException{
+	public List<?> readAllResultSet(String query,  Object [] vals) throws SQLException{
 		
 		PreparedStatement ps = conn.prepareStatement(query);
 		
@@ -83,8 +60,21 @@ public abstract class BaseDAO<T> {
 		return mapResults(rs);
 	}
 	
+	public List<?> readFirstLevel(String query,  Object [] vals) throws SQLException{
+		
+		PreparedStatement ps = conn.prepareStatement(query);
+		
+		if(vals != null)
+			loopStatement(vals, ps);
+		
+		ResultSet rs = ps.executeQuery();
+		return mapFirstLevelResults(rs);
+	}
+
 	public abstract List<?> mapResults(ResultSet rs) throws SQLException;
 	
+	public abstract List<?> mapFirstLevelResults(ResultSet rs) throws SQLException;
+
 	private void loopStatement(Object[] vals, PreparedStatement ps)
 			throws SQLException {
 		int loop = 1;

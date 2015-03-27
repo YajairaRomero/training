@@ -6,11 +6,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gcit.training.library.Books;
 import com.gcit.training.library.Publisher;
 
 public class PublisherDAO extends BaseDAO<Publisher>{
-	
-	
+
+
 	public PublisherDAO(Connection c){
 		this.conn = c;
 	}
@@ -20,26 +21,38 @@ public class PublisherDAO extends BaseDAO<Publisher>{
 		save("insert into tbl_publisher(publisherName, publisherAddress, publisherPhone) values(?, ?, ?)",
 				new Object[] {publisher.getPname(), publisher.getPaddr(),  publisher.getPphone()});
 	}
-	
-	
-	
-	public List<Publisher> read() throws SQLException {
 
-		 return (List<Publisher>) saveResultSet("select * from tbl_publisher");
+
+
+	public List<Publisher> read() throws SQLException {
+		
+		return (List<Publisher>) readResultSet("select * from tbl_publisher");
 
 	}
 
 	public Publisher readOne(int publisherid) throws SQLException {
-			readOne = 1;
-		
-		 List<Publisher> list = (List<Publisher>) saveResultSet("select publisherName, publisherAddress, publisherPhone from tbl_publisher where publisherId = ?",
-					new Object [] { publisherid});
-		 
-		 if(list != null && list.size()>0)			 
-			 return list.get(0);
-		 
-		 else
-			 return null;
+
+		List<Publisher> list = (List<Publisher>) readAllResultSet("select * from tbl_publisher where publisherId = ?",
+				new Object [] { publisherid});
+
+		if(list != null && list.size()>0)			 
+			return list.get(0);
+
+		else
+			return null;
+
+	}
+	
+	public Publisher readOneFirstLevel(int publisherid) throws SQLException {
+
+		List<Publisher> list = (List<Publisher>) readFirstLevel("select * from tbl_publisher where publisherId = ?",
+				new Object [] { publisherid});
+
+		if(list != null && list.size()>0)			 
+			return list.get(0);
+
+		else
+			return null;
 
 	}
 
@@ -50,7 +63,7 @@ public class PublisherDAO extends BaseDAO<Publisher>{
 	}
 
 	public void delete(Publisher publisher) throws SQLException{
-		
+
 		save("delete from tbl_publisher where publisherId = ?",
 				new Object[] {publisher.getPid()});
 	}
@@ -58,17 +71,41 @@ public class PublisherDAO extends BaseDAO<Publisher>{
 	@Override
 	public List<Publisher> mapResults(ResultSet rs) throws SQLException {
 		List<Publisher> list = new ArrayList<Publisher>(); 
-		
+		BooksDAO bDAO = new BooksDAO(conn);
+
 		while(rs.next()){
 			Publisher p = new Publisher();
 			
-			if(readOne == 0)
-				p.setPid(rs.getInt("publisherId"));
+			p.setPid(rs.getInt("publisherId"));
 			p.setPname(rs.getString("publisherName"));
 			p.setPaddr(rs.getString("publisherAddress"));
 			p.setPphone(rs.getString("publisherPhone"));
+
+			//set the list of books they've published
+			List<Books> booklist =  (List<Books>) bDAO.readFirstLevel("select * from tbl_book where pubId = ?",
+					new Object[] {p.getPid()});
+			p.setBooks(booklist);		
+
 			list.add(p);	
 		}
+		return list;
+	}
+
+	@Override
+	public List<Publisher> mapFirstLevelResults(ResultSet rs) throws SQLException {
+		List<Publisher> list = new ArrayList<Publisher>(); 
+
+		while(rs.next()){
+			Publisher p = new Publisher();
+
+			p.setPid(rs.getInt("publisherId"));
+			p.setPname(rs.getString("publisherName"));
+			p.setPaddr(rs.getString("publisherAddress"));
+			p.setPphone(rs.getString("publisherPhone"));
+
+			list.add(p);	
+		}
+		
 		return list;
 	}
 
