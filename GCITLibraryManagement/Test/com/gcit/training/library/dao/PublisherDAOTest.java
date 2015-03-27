@@ -49,12 +49,25 @@ public class PublisherDAOTest {
 	
 	@Test
 	public void testRead() throws SQLException {
-		Publisher publisher = new Publisher();
-		publisher.setPid(2);
 		
 		try {
 			conn.setAutoCommit(false);
-			new PublisherDAO(conn).read(publisher);
+			new PublisherDAO(conn).read();
+			conn.commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			conn.rollback();
+			fail("Publisher update failed");
+		}
+	}
+	
+	@Test
+	public void testReadOne() throws SQLException {
+		
+		try {
+			conn.setAutoCommit(false);
+			new PublisherDAO(conn).readOne(2);
 			conn.commit();
 			
 		} catch (Exception e) {

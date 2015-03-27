@@ -46,12 +46,10 @@ public class LibraryBranchDAOTest {
 	
 	@Test
 	public void testRead() {
-		LibraryBranch branch = new LibraryBranch();
-		branch.setBranchid(4);
 				
 		try {
 			conn.setAutoCommit(false);
-			new LibraryBranchDAO(conn).read(branch);
+			new LibraryBranchDAO(conn).read();
 			conn.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -59,6 +57,18 @@ public class LibraryBranchDAOTest {
 		}
 	}
 
+	@Test
+	public void testReadOne() {
+	
+		try {
+			conn.setAutoCommit(false);
+			new LibraryBranchDAO(conn).readOne(4);
+			conn.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("library branch update failed");
+		}
+	}
 
 	//@Test
 	public void testUpdate() {

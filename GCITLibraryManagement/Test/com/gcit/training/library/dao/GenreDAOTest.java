@@ -46,19 +46,31 @@ public class GenreDAOTest {
 	
 	@Test
 	public void testRead() throws SQLException {
-		Genre genre = new Genre();
-		genre.setGenreid(5);
+
 		try {
 			conn.setAutoCommit(false);
-			new GenreDAO(conn).read(genre);
+			new GenreDAO(conn).read();
 			conn.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			conn.rollback();
-			fail("Genre update failed");
+			fail("Genre read failed");
 		}
 	}
 	
+	@Test
+	public void testReadOne() throws SQLException {
+
+		try {
+			conn.setAutoCommit(false);
+			new GenreDAO(conn).readOne(2);
+			conn.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			conn.rollback();
+			fail("Genre readOne failed");
+		}
+	}
 	
 	//@Test
 	public void testUpdate() throws SQLException {

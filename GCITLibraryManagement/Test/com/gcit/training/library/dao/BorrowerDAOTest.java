@@ -50,12 +50,10 @@ public class BorrowerDAOTest {
 	
 	@Test
 	public void testRead() throws SQLException {
-		Borrower borrower = new Borrower();
-		borrower.setCardno(10);
-			
+		
 		try {
 			conn.setAutoCommit(false);
-			new BorrowerDAO(conn).read(borrower);
+			new BorrowerDAO(conn).read();
 			conn.commit();
 			
 		} catch (Exception e) {
@@ -65,6 +63,20 @@ public class BorrowerDAOTest {
 		}
 	}
 	
+	@Test
+	public void testReadOne() throws SQLException {
+				
+		try {
+			conn.setAutoCommit(false);
+			new BorrowerDAO(conn).readOne(13);
+			conn.commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			conn.rollback();
+			fail("borrower read failed");
+		}
+	}
 	
 	//@Test
 	public void testUpdate() throws SQLException {

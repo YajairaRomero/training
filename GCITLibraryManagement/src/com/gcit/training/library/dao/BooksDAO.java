@@ -1,15 +1,17 @@
 package com.gcit.training.library.dao;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.gcit.training.library.Author;
 import com.gcit.training.library.Books;
 
-public class BooksDAO extends BaseDAO {
+public class BooksDAO extends BaseDAO<Books> {
 	
 	public BooksDAO(Connection c){
 		this.conn = c;
@@ -37,14 +39,26 @@ public class BooksDAO extends BaseDAO {
 	}
 	
 	
-	public void read(Books book) throws SQLException{
+	public List<Books> read() throws SQLException{
 		
-		List<Object> list = saveResultSet("select title from tbl_book where bookId = ?", 
-				new Object [] { book.getBookid()});
+		return (List<Books>) saveResultSet("select * from tbl_book");
 
-		for(Object obj : list)
-			System.out.print(obj);
 	}
+	
+
+	public Books readOne(int bookid) throws SQLException {
+		
+		readOne = 1;
+		 List<Books> list = (List<Books>) saveResultSet("select title from tbl_book where bookId = ?",
+				 new Object[] {bookid});
+		 
+		 if(list != null && list.size()>0)
+			 return list.get(0);
+		 else
+			 return null;
+
+	}
+	
 	
 	
 	public void update(Books book) throws SQLException{
@@ -67,6 +81,31 @@ public class BooksDAO extends BaseDAO {
 		save("delete from tbl_book where bookId = ?", new Object[] {book.getBookid()});
 		
 		
+	}
+
+	@Override
+	public List<Books> mapResults(ResultSet rs) throws SQLException {
+		
+		List<Books> list = new ArrayList<Books>(); 
+		AuthorDAO aDAO = new AuthorDAO(conn);
+		PublisherDAO pDAO = new PublisherDAO(conn);
+		
+		while(rs.next()){
+			Books b = new Books();
+			
+			if(readOne == 0)
+				b.setBookid(rs.getInt("bookId"));
+			b.setTitle(rs.getString("title"));
+			
+			List<Author> authorList = (List<Author>) aDAO.saveResultSet("select * from tbl_author where authorId in (select authorId from tbl_book_authors where bookId = ?)",
+					new Object[] {b.getBookid()});
+			b.setAuthors(authorList);
+			
+			b.setPub(pDAO.readOne(rs.getInt("pubId")));
+			
+			list.add(b);	
+		}
+		return list;
 	}
 	
 	

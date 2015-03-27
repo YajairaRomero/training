@@ -62,21 +62,10 @@ public class BookCopiesDAOTest {
 
 	@Test
 	public void testRead() throws SQLException {
-	BookCopies bc = new BookCopies();
-		
-		//set bookid
-		Books book = new Books();
-		book.setBookid(2);
-		bc.setBooks(book);
-		
-		//set branchId
-		LibraryBranch lb = new LibraryBranch();
-		lb.setBranchid(3);
-		bc.setBranches(lb);
 		
 		try {
 			conn.setAutoCommit(false);
-			new BookCopiesDAO(conn).read(bc);
+			new BookCopiesDAO(conn).read();
 			conn.commit();
 			
 		} catch (Exception e) {
@@ -86,6 +75,21 @@ public class BookCopiesDAOTest {
 		}
 	}
 
+	@Test
+	public void testReadOne() throws SQLException {
+		
+		try {
+			conn.setAutoCommit(false);
+			new BookCopiesDAO(conn).readOne(1, 10);
+			conn.commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			conn.rollback();
+			fail("bookcopies create failed");
+		}
+	}
+	
 	//@Test
 	public void testUpdate() throws SQLException {
 	BookCopies bc = new BookCopies();

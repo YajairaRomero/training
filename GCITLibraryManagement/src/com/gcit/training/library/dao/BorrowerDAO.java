@@ -1,12 +1,16 @@
 package com.gcit.training.library.dao;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.gcit.training.library.Author;
 import com.gcit.training.library.Borrower;
+import com.gcit.training.library.Publisher;
 
-public class BorrowerDAO extends BaseDAO{
+public class BorrowerDAO extends BaseDAO<Borrower>{
 
 	public BorrowerDAO(Connection c){
 		this.conn = c;
@@ -18,14 +22,23 @@ public class BorrowerDAO extends BaseDAO{
 				new Object[] { borrower.getName(),  borrower.getAddress(), borrower.getPhone()});
 
 	}
-	
-	public void read(Borrower borrower) throws SQLException {
 
-		List<Object> list = saveResultSet("select name, address, phone from tbl_borrower where cardNo = ?",
-				new Object [] { borrower.getCardno()});
+	public List<Borrower> read() throws SQLException {
 
-		for(Object obj : list)
-			System.out.print(obj + "  ");
+		return (List<Borrower>) saveResultSet("select * from tbl_borrower");
+
+	}
+
+	public Borrower readOne(int borrowerid) throws SQLException {
+		readOne = 1;
+		List<Borrower> list = (List<Borrower>) saveResultSet("select name, address, phone from tbl_borrower where cardNo = ?",
+				new Object [] { borrowerid});
+
+		if(list != null && list.size()>0)
+			return list.get(0);
+		else
+			return null;
+
 	}
 
 	public void update(Borrower borrower) throws SQLException{
@@ -39,5 +52,22 @@ public class BorrowerDAO extends BaseDAO{
 				new Object[] { borrower.getCardno()});
 
 
+	}
+
+	@Override
+	public List<Borrower> mapResults(ResultSet rs) throws SQLException {
+		List<Borrower> list = new ArrayList<Borrower>(); 
+
+		while(rs.next()){
+			Borrower b = new Borrower();
+
+			if(readOne == 0)
+				b.setCardno(rs.getInt("cardNo"));
+			b.setName(rs.getString("name"));
+			b.setAddress(rs.getString("address"));
+			b.setPhone(rs.getString("phone"));
+			list.add(b);	
+		}
+		return list;
 	}
 }

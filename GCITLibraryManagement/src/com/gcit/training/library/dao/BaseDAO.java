@@ -11,8 +11,8 @@ import java.util.List;
 
 
 
-public abstract class BaseDAO {
-
+public abstract class BaseDAO<T> {
+	protected int readOne = 0; 
 	protected Connection conn = null;
 
 	public BaseDAO() {
@@ -43,10 +43,10 @@ public abstract class BaseDAO {
 
 	}
 	
-	public List saveResultSet(String query, Object [] vals) throws SQLException{
+	/*
+	public List saveResultSet(String query) throws SQLException{
 		
 		PreparedStatement ps = conn.prepareStatement(query);
-		loopStatement(vals, ps);
 		ResultSet rs = ps.executeQuery();
 		
 		//get number of columns
@@ -66,7 +66,25 @@ public abstract class BaseDAO {
 		
 		return result;
 	}
-
+*/
+	public List<?> saveResultSet(String query) throws SQLException{
+		return saveResultSet(query, null); 
+	
+	}
+	
+	public List<?> saveResultSet(String query,  Object [] vals) throws SQLException{
+		
+		PreparedStatement ps = conn.prepareStatement(query);
+		
+		if(vals != null)
+			loopStatement(vals, ps);
+		
+		ResultSet rs = ps.executeQuery();
+		return mapResults(rs);
+	}
+	
+	public abstract List<?> mapResults(ResultSet rs) throws SQLException;
+	
 	private void loopStatement(Object[] vals, PreparedStatement ps)
 			throws SQLException {
 		int loop = 1;
@@ -79,6 +97,8 @@ public abstract class BaseDAO {
 			loop++;
 		}
 	}
+	
+	
 
 
 }

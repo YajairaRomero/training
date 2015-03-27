@@ -45,11 +45,26 @@ public class AuthorDAOTest {
 	}
 
 	@Test
-	public void testRead() {
+	public void testReadOne() {
 		Author author = new Author();
 		author.setAuthorid(1);
 		try {
-			new AuthorDAO(conn).read(author);
+			new AuthorDAO(conn).readOne(1);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Author read failed");
+		}
+		
+		
+	}
+	
+	
+	@Test
+	public void testRead() {
+		
+		try {
+			new AuthorDAO(conn).read();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

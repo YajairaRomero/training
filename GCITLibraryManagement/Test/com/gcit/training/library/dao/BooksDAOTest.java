@@ -75,7 +75,7 @@ public class BooksDAOTest {
 		
 		try {
 			conn.setAutoCommit(false);
-			new BooksDAO(conn).read(book);
+			new BooksDAO(conn).read();
 			conn.commit();
 			
 		} catch (Exception e) {
