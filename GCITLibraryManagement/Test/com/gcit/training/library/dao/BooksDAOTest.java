@@ -79,7 +79,7 @@ public class BooksDAOTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 			conn.rollback();
-			fail("books delete failed");
+			fail("books read failed");
 		}
 		
 	}
@@ -97,14 +97,28 @@ public class BooksDAOTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 			conn.rollback();
-			fail("books delete failed");
+			fail("books readOne failed");
 		}
 		
 	}
 
-	//@Test
-	public void testUpdate() {
-		fail("Not yet implemented");
+	@Test
+	public void testUpdate() throws SQLException {
+		Books book = new Books();
+		book.setBookid(5);
+		book.setTitle("Private New York");
+
+		
+		try {
+			conn.setAutoCommit(false);
+			new BooksDAO(conn).update(book);
+			conn.commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			conn.rollback();
+			fail("books update failed");
+		}
 	}
 
 	//@Test

@@ -35,6 +35,7 @@ public class LibraryBranchDAO extends BaseDAO<LibraryBranch> {
 
 		if(list != null && list.size()>0)
 			return list.get(0);
+		
 		else
 			return null;
 

@@ -53,6 +53,7 @@ public class BooksDAO extends BaseDAO<Books> {
 
 		if(list != null && list.size()>0)
 			return list.get(0);
+		
 		else
 			return null;
 
@@ -62,7 +63,7 @@ public class BooksDAO extends BaseDAO<Books> {
 
 	public void update(Books book) throws SQLException{
 
-
+		save("update tbl_book set title = ? where bookId = ?", new Object[] {book.getTitle(), book.getBookid()});
 
 	}
 
@@ -73,7 +74,6 @@ public class BooksDAO extends BaseDAO<Books> {
 			for(Author a : book.getAuthors()){
 				save("delete from tbl_book_authors where bookId = ?", new Object [] { book.getBookid()});
 			}
-
 		}
 
 		//delete from tbl_book after
