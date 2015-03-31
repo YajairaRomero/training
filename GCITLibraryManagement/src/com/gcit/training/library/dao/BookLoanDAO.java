@@ -58,6 +58,13 @@ public class BookLoanDAO extends BaseDAO<BookLoan>{
 			return null;
 
 	}
+	
+	public List<BookLoan> readMany(int cardno) throws SQLException {
+
+		return (List<BookLoan>) readAllResultSet("select * from tbl_book_loans where cardNo = ?",
+				new Object[] {cardno});
+
+	}
 
 	public void update(BookLoan loan) throws SQLException{
 
@@ -82,7 +89,7 @@ public class BookLoanDAO extends BaseDAO<BookLoan>{
 		while(rs.next()){
 			BookLoan bl = new BookLoan();
 
-			bl.setBook(bDAO.readOne(rs.getInt("branchId")));
+			bl.setBook(bDAO.readOne(rs.getInt("bookId")));
 			bl.setBranch(lbDAO.readOne(rs.getInt("branchId")));
 			bl.setBorrower(brDAO.readOne(rs.getInt("cardNo")));
 			bl.setDateOut(rs.getDate("dateOut"));

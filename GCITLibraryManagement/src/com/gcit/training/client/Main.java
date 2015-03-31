@@ -11,8 +11,7 @@ public class Main {
 	public static void main(String[] args) {
 
 			Scanner input = new Scanner(System.in);
-
-			boolean cont = true;   //while the program is still continuing
+			boolean cont = true;   
 			
 			while(cont){ //loop back to main menu
 				
@@ -20,11 +19,9 @@ public class Main {
 						+ "Which category of user are you?\n1)Librarian \n2)Administrator \n3)Borrower");
 				
 				int ch = input.nextInt();  //user's choice
-
 				boolean cont2 = true;
 				
 				switch (ch) {
-
 				
 				case 1:
 					//Librarian
@@ -40,27 +37,37 @@ public class Main {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					}
-					
+					}					
 					else
 						cont2 = false;
 					}
 					break;
 					
 				case 2:
-					//Administrator
-					
+					Administrator admin = new Administrator();
+					try {
+						admin.begin(input);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					break;
 					
 				case 3:
 					//borrower
-					
+					Borrower borr = new Borrower();
+					try {
+						borr.begin(input);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					break;
 					
 				default:
 					break;
-					
-					
+									
 				}
 				
 			}//loop back to main menu

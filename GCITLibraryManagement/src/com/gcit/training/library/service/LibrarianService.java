@@ -25,30 +25,10 @@ public class LibrarianService extends BaseService{
 	}
 
 	//display library branches
-	public void displayBranches() throws Exception{
+	public void displayLibraryBranches() throws Exception{
 
-		Connection conn = getConnection();
-		LibraryBranchDAO lbDAO = new LibraryBranchDAO(conn); 
-		
-		try{
-			lbList = lbDAO.read();
-			conn.commit();
-		} catch(SQLException e){
-			conn.rollback();
-		} finally{
-			conn.close();
-			conn = null;
-		}
-
-		int i = 0;
-		while ( i < lbList.size()){
-			LibraryBranch branch = lbList.get(i);
-			i++;
-			System.out.println(i + ") " + branch.getBname() + " " + branch.getBaddr());
-		}
-		i++;
-		System.out.println(i + ") Quit to previous");
-		max = i;
+		lbList = displayBranches();
+		max = lbList.size() + 1;
 
 	}
 	
@@ -77,7 +57,7 @@ public class LibrarianService extends BaseService{
 	}
 	
 	//display books available at branch 
-	public void dislpayBranchCopies() throws Exception{
+	public void displayBranchCopies() throws Exception{
 		Connection conn = getConnection(); 
 		BookCopiesDAO bcDAO = new BookCopiesDAO(conn); 
 		

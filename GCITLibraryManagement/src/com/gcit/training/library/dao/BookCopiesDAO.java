@@ -37,6 +37,15 @@ public class BookCopiesDAO extends BaseDAO<BookCopies>{
 
 	}
 	
+	
+	
+	public List<BookCopies> readHaving(int branchid) throws SQLException {
+
+		return (List<BookCopies>) readAllResultSet("select * from tbl_book_copies where branchId = ? and noOfCopies>0",
+				new Object[] {branchid});
+
+	}
+	
 	public BookCopies readOne(int bookid, int branchid) throws SQLException {
 
 		List<BookCopies> list = (List<BookCopies>) readAllResultSet("select * from tbl_book_copies where bookId = ? and branchId = ?",

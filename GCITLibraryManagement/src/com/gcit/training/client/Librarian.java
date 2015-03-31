@@ -13,7 +13,8 @@ public class Librarian {
 		LibrarianService service = new LibrarianService();
 		boolean temp = true;
 		while(temp){
-			service.displayBranches();
+			service.displayLibraryBranches();
+			
 			int choice = in.nextInt();
 
 			if(choice < service.max){
@@ -63,7 +64,7 @@ public class Librarian {
 						boolean temp3 = true;
 						while(temp3){
 							System.out.println("Pick the book you want to add copies of to your branch");
-							service.dislpayBranchCopies();
+							service.displayBranchCopies();
 							choice = in.nextInt();
 
 							if(choice < service.max){
@@ -71,7 +72,7 @@ public class Librarian {
 										"\nEnter new number of copies: ");
 								int numCopies = in.nextInt();
 								service.setBranchCopies(choice, numCopies);
-								System.out.println("Number of copies updated successfully");
+								System.out.println("Number of copies updated successfully \n");
 							}
 							else
 								temp3 = false;
@@ -84,15 +85,11 @@ public class Librarian {
 						break;
 					default:
 						break;
-					}
-					
-				}//loop back to previous menu				
-				
+					}					
+				}//loop back to previous menu	
 			}
 			else 
-				temp = false;
-		
-		}
-		
+				temp = false;	
+		}	
 	}//loop back to previous menu
 }
