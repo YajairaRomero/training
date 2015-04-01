@@ -10,6 +10,7 @@ public class BookCopies extends AbstractDomain {
 	private int noOfCopies = 0;
 	
 	//foreign keys
+	private BookCopiesId bcId = null;
 	private Books books = null;
 	private LibraryBranch branches = null;
 	

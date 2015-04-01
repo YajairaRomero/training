@@ -1,10 +1,24 @@
 package com.gcit.training.client;
 
+import java.util.List;
 import java.util.Scanner;
 
+import com.gcit.training.library.BookCopies;
+import com.gcit.training.library.BookLoan;
+import com.gcit.training.library.Borrower;
+import com.gcit.training.library.LibraryBranch;
 import com.gcit.training.library.service.BorrowerService;
 
-public class Borrower {
+public class BorrowerClient {
+
+	private int max = 0;
+	private List<LibraryBranch> lbList = null;
+	private LibraryBranch branch = null;
+	private List<BookCopies> copiesList = null;
+	private List<BookLoan> loanList = null;
+	private BookCopies copy = null;
+	private Borrower borr = null;
+	private BookLoan loan = null;
 
 	public void begin(Scanner in) throws Exception{
 
@@ -12,13 +26,18 @@ public class Borrower {
 		int choice = 0;
 		boolean temp = false;
 
+
 		while(temp == false){
 			System.out.print("Enter your card number: ");
 			choice = in.nextInt();
-			temp = service.checkCardNo(choice);
+			borr = service.checkCardNo(choice);
 
-			if(temp == false)
+			if(borr == null){
 				System.out.println("Invalid card number");
+				temp = false;
+			}
+			else
+				temp = true;
 		}
 
 		while(temp){
@@ -32,20 +51,24 @@ public class Borrower {
 
 				while(temp2){
 					System.out.println("Pick the branch you want to check out from");
-					service.displayLibraryBranch();
+					lbList = service.displayLibraryBranch();
+					max = lbList.size() + 1;
 					choice = in.nextInt();
 
-					if(choice < service.max){
-						service.chooseBranch(choice);
+					if(choice < max){
+						branch = lbList.get(choice - 1);
+						
 						boolean temp3 = true;
 
 						while(temp3){
 							System.out.println("Pick the book you want to check out");
-							service.displayBranchCopies();
+							copiesList = service.displayBranchCopies(branch);
+							max = copiesList.size() + 1;
 							choice = in.nextInt();
 
-							if(choice < service.max){
-								service.chooseBook(choice);
+							if(choice < max){
+								copy = copiesList.get(choice - 1); 
+								service.chooseBook(copy, borr, branch);
 								System.out.println("Book checked out successfully \n");
 							}
 							else 
@@ -63,11 +86,13 @@ public class Borrower {
 				//return a book
 				while(temp2){
 					System.out.println("Pick the book you want to return");
-					service.displayBooksCheckedOut();
+					loanList = service.displayBooksCheckedOut(borr);
+					max = loanList.size()+1;
 					choice = in.nextInt();
 
-					if(choice < service.max){					
-						service.returnBook(choice);
+					if(choice < max){	
+						loan = loanList.get(choice - 1);
+						service.returnBook(loan);
 						System.out.println("Book returned successfully\n");
 					}
 					else

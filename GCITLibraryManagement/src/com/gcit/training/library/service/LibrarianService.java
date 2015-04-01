@@ -10,34 +10,12 @@ import com.gcit.training.library.dao.BookCopiesDAO;
 import com.gcit.training.library.dao.LibraryBranchDAO;
 
 public class LibrarianService extends BaseService{
-
-	private LibraryBranch branch = null;
-	private List<BookCopies> copiesList = null;
-	private List<LibraryBranch> lbList = null;
-	public int max = 0;
 	
-	public LibraryBranch getBranch() {
-		return branch;
+	//return list of library branches
+	public List<LibraryBranch> displayLibraryBranches() throws Exception{
+		return displayBranches();
 	}
 
-	public void setBranch(LibraryBranch branch) {
-		this.branch = branch;
-	}
-
-	//display library branches
-	public void displayLibraryBranches() throws Exception{
-
-		lbList = displayBranches();
-		max = lbList.size() + 1;
-
-	}
-	
-	//get info on the branch user chose
-	public void chooseBranch(int choice) throws Exception{
-		
-		branch = lbList.get(choice-1);
-		
-	}
 	
 	//update branch info
 	public void updateBranch(LibraryBranch newBranch) throws Exception{
@@ -57,12 +35,13 @@ public class LibrarianService extends BaseService{
 	}
 	
 	//display books available at branch 
-	public void displayBranchCopies() throws Exception{
+	public List<BookCopies> displayBranchCopies(int id) throws Exception{
 		Connection conn = getConnection(); 
 		BookCopiesDAO bcDAO = new BookCopiesDAO(conn); 
+		 List<BookCopies> copiesList = null;
 		
 		try{
-			copiesList = bcDAO.readMany(branch.getBranchid());
+			copiesList = bcDAO.readByBranchId(id);
 			conn.commit();
 		} catch(SQLException e){
 			conn.rollback();
@@ -81,24 +60,19 @@ public class LibrarianService extends BaseService{
 		}
 		i++;
 		System.out.println(i + ") Quit to previous");
-		max = i;
+		
+		return copiesList;
 		
 	}
 	
-	//user chose a book
-	
-	public int numBranchCopies(int choice){
-		return copiesList.get(choice - 1).getNoOfCopies();	
-		
-	}
 	
 	//update book copies
-	public void setBranchCopies(int choice, int noOfCopies) throws Exception{
+	public void setBranchCopies(BookCopies bc) throws Exception{
 		Connection conn = getConnection();
 		//LibraryBranchDAO lbDAO = new LibraryBranchDAO(conn); 
 		BookCopiesDAO bcDAO = new BookCopiesDAO(conn); 
-		BookCopies bc = copiesList.get(choice - 1);
-		bc.setNoOfCopies(noOfCopies);
+//		BookCopies bc = copiesList.get(choice - 1);
+	//	bc.setNoOfCopies(noOfCopies);
 		
 		try{
 			bcDAO.update(bc);

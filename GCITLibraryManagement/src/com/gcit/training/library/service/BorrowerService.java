@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.gcit.training.library.BookCopies;
 import com.gcit.training.library.BookLoan;
-import com.gcit.training.library.Books;
 import com.gcit.training.library.Borrower;
 import com.gcit.training.library.LibraryBranch;
 import com.gcit.training.library.dao.BookCopiesDAO;
@@ -18,21 +17,15 @@ import com.gcit.training.library.dao.BorrowerDAO;
 
 
 public class BorrowerService extends BaseService{
-	public int max = 0;
-	private List<LibraryBranch> lbList = null;
-	private LibraryBranch branch = null;
-	private List<BookCopies> copiesList = null;
-	private List<BookLoan> loanList = null;
-	private BookCopies copy = null;
-	private Borrower borr = null;
 
 	//make sure that a valid cardNo has been given
-	public boolean checkCardNo(int cardno) throws Exception{
+	public Borrower checkCardNo(int cardno) throws Exception{
 
 		Connection conn = getConnection();
 		//LibraryBranchDAO lbDAO = new LibraryBranchDAO(conn); 
 		BorrowerDAO bDAO = new BorrowerDAO(conn);
-
+		Borrower borr = null;
+		
 		try{
 			borr = bDAO.readOne(cardno);
 			conn.commit();
@@ -43,34 +36,26 @@ public class BorrowerService extends BaseService{
 			conn = null;
 		}
 
-		if(borr == null)		
-			return false;
-		else 
-			return true;
+	return borr;
 
 	}
-
 
 	//CHECK OUT A BOOK
 
 	//display library branches
-	public void displayLibraryBranch() throws Exception{
-		lbList = displayBranches();
-		max = lbList.size() + 1;
-	}
-
-	//get info on the branch user chose
-	public void chooseBranch(int choice) throws Exception{
-		branch = lbList.get(choice-1);		
+	public List<LibraryBranch> displayLibraryBranch() throws Exception{
+		return displayBranches();
+		
 	}
 
 	//display books available at branch 
-	public void displayBranchCopies() throws Exception{
+	public List<BookCopies> displayBranchCopies(LibraryBranch branch) throws Exception{
 		Connection conn = getConnection(); 
 		BookCopiesDAO bcDAO = new BookCopiesDAO(conn); 
-
+		 List<BookCopies> copiesList = null;
+		 
 		try{
-			copiesList = bcDAO.readHaving(branch.getBranchid());
+			copiesList = bcDAO.readBooksGreaterThanZero(branch.getBranchid());
 			conn.commit();
 		} catch(SQLException e){
 			conn.rollback();
@@ -87,14 +72,12 @@ public class BorrowerService extends BaseService{
 		}
 		i++;
 		System.out.println(i + ") Quit to previous");
-		max = i;
-
+		
+		return copiesList;
 	}
 
 	//get info on the branch user chose
-	public void chooseBook(int choice) throws Exception{
-
-		copy =  copiesList.get(choice-1);			 
+	public void chooseBook(BookCopies copy, Borrower borr, LibraryBranch branch) throws Exception{
 
 		Connection conn = getConnection(); 
 		BookCopiesDAO bcDAO = new BookCopiesDAO(conn);
@@ -138,10 +121,11 @@ public class BorrowerService extends BaseService{
 	//RETURN A BOOK
 
 	//display books user has checked out
-	public void displayBooksCheckedOut() throws Exception{
+	public List<BookLoan> displayBooksCheckedOut(Borrower borr) throws Exception{
 		Connection conn = getConnection(); 
 		BookLoanDAO blDAO = new BookLoanDAO(conn); 
-
+		List<BookLoan> loanList = null;
+		
 		try{
 			loanList = blDAO.readMany(borr.getCardno());
 			conn.commit();
@@ -161,15 +145,14 @@ public class BorrowerService extends BaseService{
 		i++;
 		System.out.println(i + ") Quit to previous");
 
-		max = i;
+		return loanList;
 	}
 
-	public void returnBook(int choice) throws Exception{			
+	public void returnBook(BookLoan bl) throws Exception{			
 
 		Connection conn = getConnection(); 
 		BookLoanDAO blDAO = new BookLoanDAO(conn); 
-		BookCopiesDAO bcDAO = new BookCopiesDAO(conn);			
-		BookLoan bl = loanList.get(choice-1);	
+		BookCopiesDAO bcDAO = new BookCopiesDAO(conn);				
 		BookCopies bc = null;				
 
 		try{

@@ -1,8 +1,5 @@
 package com.gcit.training.client;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -26,7 +23,7 @@ public class Main {
 				case 1:
 					//Librarian
 					while(cont2){
-					Librarian lib = new Librarian();
+					LibrarianClient lib = new LibrarianClient();
 					System.out.println("LIBRARIAN\n1) Enter branch you manage \n2) Quit to previous");
 					int x = input.nextInt();
 					
@@ -44,7 +41,7 @@ public class Main {
 					break;
 					
 				case 2:
-					Administrator admin = new Administrator();
+					AdministratorClient admin = new AdministratorClient();
 					try {
 						admin.begin(input);
 					} catch (Exception e) {
@@ -56,7 +53,7 @@ public class Main {
 					
 				case 3:
 					//borrower
-					Borrower borr = new Borrower();
+					BorrowerClient borr = new BorrowerClient();
 					try {
 						borr.begin(input);
 					} catch (Exception e) {

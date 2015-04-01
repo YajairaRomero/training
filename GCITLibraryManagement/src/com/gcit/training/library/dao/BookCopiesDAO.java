@@ -30,16 +30,14 @@ public class BookCopiesDAO extends BaseDAO<BookCopies>{
 
 	}
 
-	public List<BookCopies> readMany(int branchid) throws SQLException {
+	public List<BookCopies> readByBranchId(int branchid) throws SQLException {
 
 		return (List<BookCopies>) readAllResultSet("select * from tbl_book_copies where branchId = ?",
 				new Object[] {branchid});
 
-	}
+	}	
 	
-	
-	
-	public List<BookCopies> readHaving(int branchid) throws SQLException {
+	public List<BookCopies> readBooksGreaterThanZero(int branchid) throws SQLException {
 
 		return (List<BookCopies>) readAllResultSet("select * from tbl_book_copies where branchId = ? and noOfCopies>0",
 				new Object[] {branchid});

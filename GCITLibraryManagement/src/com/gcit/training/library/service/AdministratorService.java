@@ -2,6 +2,7 @@ package com.gcit.training.library.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.gcit.training.library.Author;
 import com.gcit.training.library.Books;
@@ -422,4 +423,180 @@ public class AdministratorService extends BaseService {
 		
 	}
 	
+	public List<?> displayInventroy(Object obj)throws Exception{
+
+		if(obj instanceof Author){
+			//call a private member that takes an Author
+			return displayAuthors((Author) obj);
+		}
+		
+		else if(obj instanceof Books){
+			//call a private member that takes a book
+			return displayBooks((Books) obj);
+		}
+		else if(obj instanceof Publisher){
+			//call a private member that takes a publisher
+			return displayPublishers((Publisher) obj);
+		}
+		else if(obj instanceof LibraryBranch){
+			//call a private member that takes a publisher
+			return displayLibraryBranches((LibraryBranch) obj);
+		}
+		else if(obj instanceof Borrower){
+			//call a private member that takes a publisher
+			return displayBorrowers((Borrower) obj);
+		}
+		else
+			return null;
+		
+		
+	}
+
+	private List<Author> displayAuthors(Author obj) throws Exception {
+		Connection conn = getConnection();
+		AuthorDAO aDAO = new AuthorDAO(conn);
+		List<Author> aList = null;
+		
+		try{
+			aList = aDAO.read();
+			conn.commit();
+		} catch(SQLException e){
+			conn.rollback();
+		} finally{
+			conn.close();
+			conn = null;
+		}
+		
+		if(aList != null){
+			int i = 0;
+			while(i < aList.size()){
+				System.out.println((i + 1) + ") " + aList.get(i).getName());
+				i++;				
+			}
+			
+			i++;
+			System.out.println(i + ") Quit to previous");
+			
+		}
+		return aList;
+	}
+
+	private List<Books> displayBooks(Books obj) throws Exception {
+		Connection conn = getConnection();
+		BooksDAO bDAO = new BooksDAO(conn);
+		List<Books> bList = null;
+		try{
+			bList = bDAO.read();
+			conn.commit();
+		} catch(SQLException e){
+			conn.rollback();
+		} finally{
+			conn.close();
+			conn = null;
+		}
+		
+		if(bList != null){
+			int i = 0;
+			while(i < bList.size()){
+				System.out.println((i + 1) + ") " + bList.get(i).getTitle());
+				i++;				
+			}
+			
+			i++;
+			System.out.println(i + ") Quit to previous");
+			
+		}
+		return bList;
+		
+		
+	}
+
+	private List<Publisher> displayPublishers(Publisher obj) throws Exception {
+		Connection conn = getConnection();
+		PublisherDAO pDAO = new PublisherDAO(conn);
+		List<Publisher> pList = null;
+		
+		try{
+			pList = pDAO.read();
+			conn.commit();
+		} catch(SQLException e){
+			conn.rollback();
+		} finally{
+			conn.close();
+			conn = null;
+		}
+		
+		if(pList != null){
+			int i = 0;
+			while(i < pList.size()){
+				System.out.println((i + 1) + ") " + pList.get(i).getPname() + " " + pList.get(i).getPaddr() + " " + pList.get(i).getPphone());
+				i++;				
+			}
+			
+			i++;
+			System.out.println(i + ") Quit to previous");
+			
+		}
+		
+		return pList;
+	}
+
+	private List<LibraryBranch> displayLibraryBranches(LibraryBranch obj) throws Exception {
+		Connection conn = getConnection();
+		LibraryBranchDAO lbDAO = new LibraryBranchDAO(conn);
+		List<LibraryBranch> lbList = null;
+		
+		try{
+			lbList = lbDAO.read();
+			conn.commit();
+		} catch(SQLException e){
+			conn.rollback();
+		} finally{
+			conn.close();
+			conn = null;
+		}
+		
+		if(lbList != null){
+			int i = 0;
+			while(i < lbList.size()){
+				System.out.println((i + 1) + ") " + lbList.get(i).getBname() + " " + lbList.get(i).getBaddr());
+				i++;				
+			}
+			i++;
+			System.out.println(i + ") Quit to previous");
+			
+		}
+		
+		return lbList;
+	}
+
+	private List<Borrower> displayBorrowers(Borrower obj) throws Exception {
+		Connection conn = getConnection();
+		BorrowerDAO borrDAO = new BorrowerDAO(conn);
+		List<Borrower> borrList = null;
+		
+		try{
+			borrList = borrDAO.read();
+			conn.commit();
+		} catch(SQLException e){
+			conn.rollback();
+		} finally{
+			conn.close();
+			conn = null;
+		}
+		
+		if(borrList != null){
+			int i = 0;
+			while(i < borrList.size()){
+				System.out.println((i + 1) + ") " + borrList.get(i).getName() + " " + borrList.get(i).getAddress() + " " + borrList.get(i).getPhone());
+				i++;				
+			}
+			i++;
+			System.out.println(i + ") Quit to previous");
+			
+		}
+		
+		return borrList;
+	}
+
 }

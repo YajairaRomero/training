@@ -96,6 +96,7 @@ public class BooksDAO extends BaseDAO<Books> {
 			b.setBookid(rs.getInt("bookId"));
 			b.setTitle(rs.getString("title"));
 
+			//set authors
 			List<Author> authorList = (List<Author>) aDAO.readFirstLevel("select * from tbl_author where authorId in (select authorId from tbl_book_authors where bookId = ?)",
 					new Object[] {b.getBookid()});
 			b.setAuthors(authorList);
@@ -103,9 +104,9 @@ public class BooksDAO extends BaseDAO<Books> {
 			//set genre 
 			List<Genre> genrelist = (List<Genre>) gDAO.readFirstLevel("select * from tbl_genre where genre_id in (select genre_id from tbl_book_genres where bookId = ?)",
 					new Object[] {b.getBookid()});
-
 			b.setGenres(genrelist);
 
+			//set publisher
 			b.setPub(pDAO.readOne(rs.getInt("pubId")));
 
 
