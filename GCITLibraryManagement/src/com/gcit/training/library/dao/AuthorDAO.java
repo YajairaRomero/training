@@ -53,6 +53,19 @@ public class AuthorDAO extends BaseDAO<Author> {
 			return null;
 
 	}
+	
+	public Author readSearch(String value) throws SQLException {
+
+		List<Author> list = (List<Author>) readFirstLevel(
+				"select * from tbl_author where authorName like '%?%' limit 1, 10",
+				new Object[] { value});
+
+		if (list != null && list.size() > 0)
+			return list.get(0);
+		else
+			return null;
+
+	}
 
 	public void update(Author author) throws SQLException {
 

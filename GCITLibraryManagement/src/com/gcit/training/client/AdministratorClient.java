@@ -36,7 +36,7 @@ public class AdministratorClient {
 			case 1:
 				while(temp2){
 					//Manage books
-					System.out.println("BOOKS \n1)Add new book \n2) Update or delete existing book \n3) Quit to previous");
+					System.out.println("BOOKS \n1) Add new book \n2) Update or delete existing book \n3) Quit to previous");
 					choice = in.nextInt();
 
 					switch (choice) {
@@ -103,7 +103,7 @@ public class AdministratorClient {
 			case 2:
 				//Manage authors
 				while(temp2){					
-					System.out.println("AUTHORS \n1)Add new author \n2) Update or delete existing author \n3) Quit to previous");
+					System.out.println("AUTHORS \n1) Add new author \n2) Update or delete existing author \n3) Quit to previous");
 					choice = in.nextInt();
 
 					switch (choice) {
@@ -143,6 +143,19 @@ public class AdministratorClient {
 							
 							if(choice == 1){
 								//update
+								System.out.print("You're about to update an author with id: " + author2.getAuthorid() 
+										+ " and name " + author2.getName() + ". Enter 'quit' at prompt to cancel. \n"
+												+ "Enter new author name: ");
+								String aname = in.nextLine();
+								aname = in.nextLine();
+								
+								if(!aname.equals("quit")){
+									author2.setName(aname);
+									service.UpdateInventory(author2);
+									
+									System.out.println("Author updated successsfully \n");
+								
+								}
 							}
 							else if(choice == 2){
 								service.deleteInventory(author2);
@@ -150,8 +163,7 @@ public class AdministratorClient {
 							}
 							else{
 								//quit
-							}
-								
+							}								
 						}
 						
 						break;
@@ -171,7 +183,7 @@ public class AdministratorClient {
 				//Manage publishers
 				while(temp2){
 					//Manage books
-					System.out.println("PUBLISHERS \n1)Add new publisher \n2) Update or delete existing publisher \n3) Quit to previous");
+					System.out.println("PUBLISHERS \n1) Add new publisher \n2) Update or delete existing publisher \n3) Quit to previous");
 					choice = in.nextInt();
 
 					switch (choice) {
@@ -228,7 +240,7 @@ public class AdministratorClient {
 								else if(choice == 2){
 									//delete
 									service.deleteInventory(pub);
-									System.out.println("Borrower successfully deleted");
+									System.out.println("Publisher successfully deleted");
 								}
 							}
 
