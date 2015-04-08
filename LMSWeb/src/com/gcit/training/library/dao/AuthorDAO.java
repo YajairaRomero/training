@@ -57,7 +57,7 @@ public class AuthorDAO extends BaseDAO<Author> {
 	public List<Author> readSearch(String value) throws SQLException {
 
 		return (List<Author>) readFirstLevel(
-				"select * from tbl_author where authorName like '%"+ value +"%' ",
+				"select * from tbl_author where authorName like '%"+ value +"%'",
 				new Object[] { });
 
 
@@ -101,7 +101,6 @@ public class AuthorDAO extends BaseDAO<Author> {
 
 	@Override
 	public List<Author> mapFirstLevelResults(ResultSet rs) throws SQLException {
-		System.out.println("here");
 		List<Author> list = new ArrayList<Author>();
 
 		while (rs.next()) {
@@ -121,5 +120,22 @@ public class AuthorDAO extends BaseDAO<Author> {
 		}
 		return list;
 	}
+	
+	public List<Author> getAuthorsByName(String authorToSearch)
+			throws SQLException {
+		authorToSearch = "%" + authorToSearch + "%";
+		return (List<Author>) readFirstLevel(
+				"select * from tbl_author where authorName like ?",
+				new Object[] { authorToSearch });
+	}
+
+	public List<Author> page(int pageNo) throws SQLException {
+		return (List<Author>) readResultSet("select * from tbl_author LIMIT " + (pageNo-1)*5 + ",5");
+	}
+
+	public int count() throws SQLException {
+		return count("select count(*) from tbl_author");
+	}
+
 
 }

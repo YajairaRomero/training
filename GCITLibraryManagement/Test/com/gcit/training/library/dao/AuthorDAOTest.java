@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -44,7 +45,7 @@ public class AuthorDAOTest {
 		
 	}
 
-	@Test
+	//@Test
 	public void testReadOne() {
 		Author author = new Author();
 		author.setAuthorid(1);
@@ -55,12 +56,26 @@ public class AuthorDAOTest {
 			e.printStackTrace();
 			fail("Author read failed");
 		}
-		
-		
+				
 	}
 	
-	
 	@Test
+	public void testReadSearch() {
+
+		try {
+			List<Author> auth = new AuthorDAO(conn).readSearch("Ju");
+			System.out.println(auth.size());
+			for(Author a : auth){
+				System.out.println(a.getName());
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Author read failed");
+		}
+				
+	}	
+	//@Test
 	public void testRead() {
 		
 		try {

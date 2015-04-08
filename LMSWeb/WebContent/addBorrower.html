@@ -1,0 +1,44 @@
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"
+		aria-hidden="true">&times;</button>
+	<h4 class="modal-title">Add Borrower</h4>
+</div>
+<div class="modal-body">	
+		<div id="BorrowerList">
+	  	<table class="table">			
+			<tr>
+				<td>Name:</td>
+				<td><input type="text" id="borrowerName"></td>
+			</tr>
+			<tr>
+				<td>Address:</td>
+				<td><input type="text" id="borrowerAddr"></td>
+			</tr>
+			<tr>
+				<td>Phone:</td>
+				<td><input type="text" id="borrowerPhone"></td>
+			</tr>		
+		</table>
+	</div>
+	
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	<button type="button" class="btn btn-primary" onclick="submitBorrower();">Save changes</button>
+</div>
+
+<form name="addBorrowerFrm" action="addBorrower" method="post">
+	<input type="hidden" name="borrowerNameToAdd" />
+	<input type="hidden" name="borrowerAddrToAdd" />
+	<input type="hidden" name="borrowerPhoneToAdd" />
+</form>
+<script>
+
+	window.submitBorrower = function() {
+		document.addBorrowerFrm.borrowerNameToAdd.value = document.getElementById('borrowerName').value;
+		document.addBorrowerFrm.borrowerAddrToAdd.value = document.getElementById('borrowerAddr').value;
+		document.addBorrowerFrm.borrowerPhoneToAdd.value = document.getElementById('borrowerPhone').value;
+		document.addBorrowerFrm.submit();
+	}
+</script>

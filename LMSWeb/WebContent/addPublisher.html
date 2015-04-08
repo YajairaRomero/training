@@ -1,0 +1,44 @@
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"
+		aria-hidden="true">&times;</button>
+	<h4 class="modal-title">Add Publisher</h4>
+</div>
+<div class="modal-body">	
+		<div id="PublisherList">
+	  	<table class="table">			
+			<tr>
+				<td>Name:</td>
+				<td><input type="text" id="publisherName"></td>
+			</tr>
+			<tr>
+				<td>Address:</td>
+				<td><input type="text" id="publisherAddr"></td>
+			</tr>
+			<tr>
+				<td>Phone:</td>
+				<td><input type="text" id="publisherPhone"></td>
+			</tr>		
+		</table>
+	</div>
+	
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	<button type="button" class="btn btn-primary" onclick="submitPublisher();">Save changes</button>
+</div>
+
+<form name="addPublisherFrm" action="addPublisher" method="post">
+	<input type="hidden" name="publisherNameToAdd" />
+	<input type="hidden" name="publisherAddrToAdd" />
+	<input type="hidden" name="publisherPhoneToAdd" />
+</form>
+<script>
+
+	window.submitPublisher = function() {
+		document.addPublisherFrm.publisherNameToAdd.value = document.getElementById('publisherName').value;
+		document.addPublisherFrm.publisherAddrToAdd.value = document.getElementById('publisherAddr').value;
+		document.addPublisherFrm.publisherPhoneToAdd.value = document.getElementById('publisherPhone').value;
+		document.addPublisherFrm.submit();
+	}
+</script>

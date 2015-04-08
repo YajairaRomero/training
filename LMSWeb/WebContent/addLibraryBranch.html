@@ -1,0 +1,38 @@
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"
+		aria-hidden="true">&times;</button>
+	<h4 class="modal-title">Add Library Branch</h4>
+</div>
+<div class="modal-body">	
+		<div id="BranchList">
+	  	<table class="table">			
+			<tr>
+				<td>Name:</td>
+				<td><input type="text" id="branchName"></td>
+			</tr>
+			<tr>
+				<td>Address:</td>
+				<td><input type="text" id="branchAddr"></td>
+			</tr>		
+		</table>
+	</div>
+	
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	<button type="button" class="btn btn-primary" onclick="submitBranch();">Save changes</button>
+</div>
+
+<form name="addBranchFrm" action="addBranch" method="post">
+	<input type="hidden" name="branchNameToAdd" />
+	<input type="hidden" name="branchAddrToAdd" />
+</form>
+<script>
+
+	window.submitBranch = function() {
+		document.addBranchFrm.branchNameToAdd.value = document.getElementById('branchName').value;
+		document.addBranchFrm.branchAddrToAdd.value = document.getElementById('branchAddr').value;
+		document.addBranchFrm.submit();
+	}
+</script>
