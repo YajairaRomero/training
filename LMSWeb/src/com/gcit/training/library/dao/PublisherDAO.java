@@ -118,11 +118,11 @@ public class PublisherDAO extends BaseDAO<Publisher>{
 	}
 
 	public List<Publisher> page(int pageNo) throws SQLException {
-		return (List<Publisher>) readResultSet("select * from tbl_author LIMIT " + (pageNo-1)*5 + ",5");
+		return (List<Publisher>) readResultSet("select * from tbl_publisher LIMIT " + (pageNo-1)*5 + ",5");
 	}
 
 	public int count() throws SQLException {
-		return count("select count(*) from tbl_author");
+		return count("select count(*) from tbl_publisher");
 	}
 
 

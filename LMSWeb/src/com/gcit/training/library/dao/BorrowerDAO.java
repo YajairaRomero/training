@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.gcit.training.library.Author;
 import com.gcit.training.library.Borrower;
-import com.gcit.training.library.Publisher;
+
 
 public class BorrowerDAO extends BaseDAO<Borrower>{
 
@@ -77,5 +77,21 @@ public class BorrowerDAO extends BaseDAO<Borrower>{
 	public List<?> mapFirstLevelResults(ResultSet rs) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public List<Borrower> getBorrowersByName(String borrowerToSearch)
+			throws SQLException {
+		borrowerToSearch = "%" + borrowerToSearch + "%";
+		return (List<Borrower>) readFirstLevel(
+				"select * from tbl_borrower where name like ?",
+				new Object[] { borrowerToSearch });
+	}
+
+	public List<Borrower> page(int pageNo) throws SQLException {
+		return (List<Borrower>) readResultSet("select * from tbl_borrower LIMIT " + (pageNo-1)*5 + ",5");
+	}
+
+	public int count() throws SQLException {
+		return count("select count(*) from tbl_borrower");
 	}
 }

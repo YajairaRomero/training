@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.gcit.training.library.LibraryBranch;
 
-
 public class LibraryBranchDAO extends BaseDAO<LibraryBranch> {
 
 	public LibraryBranchDAO(Connection c){
@@ -74,6 +73,22 @@ public class LibraryBranchDAO extends BaseDAO<LibraryBranch> {
 	public List<?> mapFirstLevelResults(ResultSet rs) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public List<LibraryBranch> getLibraryBranchesByName(String branchToSearch)
+			throws SQLException {
+		branchToSearch = "%" + branchToSearch + "%";
+		return (List<LibraryBranch>) readFirstLevel(
+				"select * from tbl_library_branch where branchName like ?",
+				new Object[] { branchToSearch });
+	}
+
+	public List<LibraryBranch> page(int pageNo) throws SQLException {
+		return (List<LibraryBranch>) readResultSet("select * from tbl_library_branch LIMIT " + (pageNo-1)*5 + ",5");
+	}
+
+	public int count() throws SQLException {
+		return count("select count(*) from tbl_library_branch");
 	}
 
 

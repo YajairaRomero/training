@@ -89,4 +89,20 @@ public class GenreDAO extends BaseDAO<Genre> {
 		}
 		return list;
 	}
+	
+	public List<Genre> getGenresByName(String genreToSearch)
+			throws SQLException {
+		genreToSearch = "%" + genreToSearch + "%";
+		return (List<Genre>) readFirstLevel(
+				"select * from tbl_genre where genre_name like ?",
+				new Object[] { genreToSearch });
+	}
+
+	public List<Genre> page(int pageNo) throws SQLException {
+		return (List<Genre>) readResultSet("select * from tbl_genre LIMIT " + (pageNo-1)*5 + ",5");
+	}
+
+	public int count() throws SQLException {
+		return count("select count(*) from tbl_genre");
+	}
 }

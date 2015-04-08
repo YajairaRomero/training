@@ -131,6 +131,22 @@ public class BooksDAO extends BaseDAO<Books> {
 		}
 		return list;
 	}
+	
+	public List<Books> getBooksByName(String bookToSearch)
+			throws SQLException {
+		bookToSearch = "%" + bookToSearch + "%";
+		return (List<Books>) readFirstLevel(
+				"select * from tbl_book where title like ?",
+				new Object[] { bookToSearch });
+	}
+
+	public List<Books> page(int pageNo) throws SQLException {
+		return (List<Books>) readResultSet("select * from tbl_book LIMIT " + (pageNo-1)*5 + ",5");
+	}
+
+	public int count() throws SQLException {
+		return count("select count(*) from tbl_book");
+	}
 
 
 }

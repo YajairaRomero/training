@@ -2,6 +2,7 @@
 <%@page import="java.util.List"%>
 <%@page import="com.gcit.training.library.service.AdministratorService"%>
 <%
+	int pageCount = new AdministratorService().countPublishers();
 	List<Publisher> Publishers = new AdministratorService().displayPublishers();
 %>
 
@@ -75,15 +76,5 @@
 		document.deletePublisherFrm.submit();
 	}
 	
-	$("#search").keyup(function(){
-		_this = this;
-		$.each($(".table").find("tr"), function(){
-			if($(this).find("td").eq(1).text().toLowerCase().indexOf($(_this).val().toLowerCase()) == -1)
-				$(this).hide();
-			else
-				$(this).show();
-		});
-	});
-
 </script>
 

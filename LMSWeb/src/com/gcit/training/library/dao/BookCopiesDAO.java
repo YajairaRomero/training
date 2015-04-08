@@ -97,6 +97,8 @@ public class BookCopiesDAO extends BaseDAO<BookCopies>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 }
 
 

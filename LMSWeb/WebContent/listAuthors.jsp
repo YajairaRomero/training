@@ -88,10 +88,8 @@
 	        	$("#authorList").html(result);
 	    });
 	}
+	
 </script>
-
-
-
 
 	
 <!--  	$("#search").keyup(function(){

@@ -643,4 +643,139 @@ public class AdministratorService extends BaseService {
 		}
 	}
 
+	public List<Publisher> pagePublishers(int pageNo) throws Exception {
+		Connection conn = getConnection();
+		try {
+			PublisherDAO aDAO = new PublisherDAO(conn);
+			return aDAO.page(pageNo);
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+
+	public int countPublishers() throws Exception {
+		Connection conn = getConnection();
+		try {
+			PublisherDAO aDAO = new PublisherDAO(conn);
+			return aDAO.count();
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+
+	public List<Publisher> searchPublisherByName(String publisherToSearch) throws Exception{
+		Connection conn = getConnection();
+		try {
+			PublisherDAO aDAO = new PublisherDAO(conn);
+			return aDAO.getPublishersByName(publisherToSearch);
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+	
+	public List<Borrower> pageBorrowers(int pageNo) throws Exception {
+		Connection conn = getConnection();
+		try {
+			BorrowerDAO aDAO = new BorrowerDAO(conn);
+			return aDAO.page(pageNo);
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+
+	public int countBorrowers() throws Exception {
+		Connection conn = getConnection();
+		try {
+			BorrowerDAO aDAO = new BorrowerDAO(conn);
+			return aDAO.count();
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+
+	public List<Borrower> searchBorrowerByName(String BorrowerToSearch) throws Exception{
+		Connection conn = getConnection();
+		try {
+			BorrowerDAO aDAO = new BorrowerDAO(conn);
+			return aDAO.getBorrowersByName(BorrowerToSearch);
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+	
+	public List<LibraryBranch> pageLibraryBranchs(int pageNo) throws Exception {
+		Connection conn = getConnection();
+		try {
+			LibraryBranchDAO aDAO = new LibraryBranchDAO(conn);
+			return aDAO.page(pageNo);
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+
+	public int countLibraryBranches() throws Exception {
+		Connection conn = getConnection();
+		try {
+			LibraryBranchDAO aDAO = new LibraryBranchDAO(conn);
+			return aDAO.count();
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+
+	public List<LibraryBranch> searchLibraryBranchByName(String LibraryBranchToSearch) throws Exception{
+		Connection conn = getConnection();
+		try {
+			LibraryBranchDAO aDAO = new LibraryBranchDAO(conn);
+			return aDAO.getLibraryBranchesByName(LibraryBranchToSearch);
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+	
+	public List<Books> pageBooks(int pageNo) throws Exception {
+		Connection conn = getConnection();
+		try {
+			BooksDAO aDAO = new BooksDAO(conn);
+			return aDAO.page(pageNo);
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+
+	public int countBooks() throws Exception {
+		Connection conn = getConnection();
+		try {
+			BooksDAO aDAO = new BooksDAO(conn);
+			return aDAO.count();
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+
+	public List<Books> searchBooksByName(String BooksToSearch) throws Exception{
+		Connection conn = getConnection();
+		try {
+			BooksDAO aDAO = new BooksDAO(conn);
+			return aDAO.getBooksByName(BooksToSearch);
+		} finally {
+			conn.close();
+			conn = null;
+		}
+	}
+
+
+
+
 }
